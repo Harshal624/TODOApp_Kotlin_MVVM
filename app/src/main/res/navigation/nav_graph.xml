@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/tasksFragment">
+
+    <fragment
+        android:id="@+id/tasksFragment"
+        android:name="com.harsh.todoapp.ui.tasks.TasksFragment"
+        android:label="Tasks"
+        tools:layout="@layout/fragment_tasks">
+        <action
+            android:id="@+id/action_tasksFragment_to_editTaskFragment"
+            app:destination="@id/editTaskFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editTaskFragment"
+        android:name="com.harsh.todoapp.ui.edittask.EditTaskFragment"
+        android:label="Edit Task"
+        tools:layout="@layout/fragment_edit_task" />
+</navigation>
