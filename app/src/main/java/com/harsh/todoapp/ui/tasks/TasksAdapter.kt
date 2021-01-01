@@ -9,9 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.harsh.todoapp.data.Task
 import com.harsh.todoapp.databinding.ItemTaskBinding
 
-class TasksAdapter() : ListAdapter<Task, TasksAdapter.ViewHolder>(
-    DiffCallBack()
-) {
+class TasksAdapter(private val listener: OnTaskClickListener) :
+    ListAdapter<Task, TasksAdapter.ViewHolder>(
+        DiffCallBack()
+    ) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemTaskBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
@@ -22,7 +23,28 @@ class TasksAdapter() : ListAdapter<Task, TasksAdapter.ViewHolder>(
         holder.bind(currentItem)
     }
 
-    class ViewHolder(private val binding: ItemTaskBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(private val binding: ItemTaskBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        init {
+            binding.apply {
+                root.setOnClickListener {
+                    val position = adapterPosition
+                    if (position != RecyclerView.NO_POSITION) {
+                        val task = getItem(position)
+                        listener.onTaskClick(task)
+                    }
+                }
+                checkbox.setOnClickListener {
+                    val position = adapterPosition
+                    if (position != RecyclerView.NO_POSITION) {
+                        val task = getItem(position)
+                        listener.onCheckBoxClick(task, checkbox.isChecked)
+                    }
+                }
+            }
+        }
+
         fun bind(task: Task) {
             binding.apply {
                 tvName.text = task.name
