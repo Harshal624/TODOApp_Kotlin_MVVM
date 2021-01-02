@@ -16,7 +16,15 @@
     </fragment>
     <fragment
         android:id="@+id/editTaskFragment"
-        android:name="com.harsh.todoapp.ui.edittask.EditTaskFragment"
-        android:label="Edit Task"
-        tools:layout="@layout/fragment_edit_task" />
+        android:name="com.harsh.todoapp.ui.edittask.AddEditTaskFragment"
+        android:label="{title}"
+        tools:layout="@layout/fragment_edit_task">
+        <argument
+            android:name="task"
+            app:argType="com.harsh.todoapp.data.Task"
+            app:nullable="true" />
+        <argument
+            android:name="title"
+            app:argType="string" />
+    </fragment>
 </navigation>
