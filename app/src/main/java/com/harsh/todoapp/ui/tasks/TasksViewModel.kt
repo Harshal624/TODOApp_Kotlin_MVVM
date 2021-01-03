@@ -6,6 +6,8 @@ import androidx.lifecycle.*
 import com.harsh.todoapp.data.PreferenceManager
 import com.harsh.todoapp.data.Task
 import com.harsh.todoapp.data.TaskDao
+import com.harsh.todoapp.util.Constants.ADD_TASK_RESULT_OK
+import com.harsh.todoapp.util.Constants.EDIT_TASK_RESULT_OK
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
@@ -69,18 +71,35 @@ class TasksViewModel @ViewModelInject constructor(
         }
     }
 
+    fun onAddEditResult(result: Int) {
+        when (result) {
+            ADD_TASK_RESULT_OK -> showTaskSavedConfirmationMesage("Task added")
+            EDIT_TASK_RESULT_OK -> showTaskSavedConfirmationMesage("Task updated")
+        }
+    }
+
+    private fun showTaskSavedConfirmationMesage(msg: String) {
+        viewModelScope.launch {
+            tasksEventChannel.send(TasksEvent.ShowTaskSavedConfirmationMessage(msg))
+        }
+    }
+
     fun onAddNewTaskClick() {
         viewModelScope.launch {
             tasksEventChannel.send(TasksEvent.NavigateToAddTaskScreen)
-
         }
+    }
 
+    fun onDeleteAllCompletedClick() = viewModelScope.launch {
+        tasksEventChannel.send(TasksEvent.NavigateToDeleteAllCompletedScreen)
     }
 
     sealed class TasksEvent {
         object NavigateToAddTaskScreen : TasksEvent()
         data class NavigateToEditTaskScreen(val task: Task) : TasksEvent()
         data class ShowUndoDeleteTaskMessage(val task: Task) : TasksEvent()
+        data class ShowTaskSavedConfirmationMessage(val msg: String) : TasksEvent()
+        object NavigateToDeleteAllCompletedScreen : TasksEvent()
     }
 
 
